@@ -23,12 +23,18 @@ armature.rotation_mode = "QUATERNION"
 
 scene = bpy.context.scene
 
-##### frame counting #######
-frame_start = 148  
-frame_end = 202
-name = "LARANJA"
+##### frame cropping #######
 
-total_frames = frame_end - frame_start + 1
+# ELAN DATA GOES HERE
+
+
+
+
+# frame_start = 148  
+# frame_end = 202
+# name = "LARANJA"
+
+# total_frames = frame_end - frame_start + 1
 
 ##### getting quaternion data from bones in animation (order x, y, z, w) #######
 quaternion_data = {

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { ModelLoader } from '../loaders/ModelLoader';
+import { OrbitControls } from 'three/examples/jsm/Addons.js';
 
 
 export class App {
@@ -8,12 +9,14 @@ export class App {
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
     renderer = new THREE.WebGLRenderer();
     timer = new THREE.Timer();
-    model_path = "/models/Clara.glb";
-
+    model_path = "/models/CLARA.glb";
+    orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
 
     async start() {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
+
+        //  --------ILUMINAÇÃO---------
 
         this.scene.background = new THREE.Color(0xa0a0a0);
         this.scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
@@ -33,8 +36,18 @@ export class App {
         dirLight.shadow.camera.far = 40;
         this.scene.add(dirLight);
 
+
+        //  --------CÂMERA---------
         this.camera.position.set(0, 3, 5);
         this.camera.lookAt(0, 1, 0);
+
+        this.orbitControls.target.set( 0, 1, 0 );
+        this.orbitControls.enableDamping = true;
+        this.orbitControls.enablePan = false;
+        this.orbitControls.maxPolarAngle = Math.PI/2 - 0.05;
+        this.orbitControls.update();
+
+        //  --------CHÃO---------
 
         const groundMesh = new THREE.Mesh( new THREE.PlaneGeometry(100, 100), new THREE.MeshPhongMaterial({ color: 0xcbcbcb, depthWrite: false }));
         groundMesh.rotation.x = - Math.PI / 2;
@@ -57,8 +70,9 @@ export class App {
 
         this.scene.add(model? model : placeholder);
 
-        
-        
+        this.animate();
+
+
         /* 
         -   Load 3d model
         -   Apply AnimationPlayer
@@ -68,5 +82,13 @@ export class App {
 
 
     }
+
+    animate = () => {
+    requestAnimationFrame(this.animate);
+
+    this.orbitControls.update();
+    this.renderer.render(this.scene, this.camera);
+
+}
 
 }
