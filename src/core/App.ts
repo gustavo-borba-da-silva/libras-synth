@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import * as MODEL_LOADER from '../loaders/ModelLoader.ts'
+import { ModelLoader } from '../loaders/ModelLoader';
 
 
 export class App {
@@ -8,7 +8,7 @@ export class App {
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
     renderer = new THREE.WebGLRenderer();
     timer = new THREE.Timer();
-    model_path = '../../public/models/Clara/CLARA.glb'
+    model_path = "/models/Clara.glb";
 
 
     async start() {
@@ -33,12 +33,29 @@ export class App {
         dirLight.shadow.camera.far = 40;
         this.scene.add(dirLight);
 
+        this.camera.position.set(0, 3, 5);
+        this.camera.lookAt(0, 1, 0);
+
         const groundMesh = new THREE.Mesh( new THREE.PlaneGeometry(100, 100), new THREE.MeshPhongMaterial({ color: 0xcbcbcb, depthWrite: false }));
         groundMesh.rotation.x = - Math.PI / 2;
         groundMesh.receiveShadow = true;
         this.scene.add(groundMesh);
 
-        var model = MODEL_LOADER.ModelLoader.loadAvatar(this.model_path);
+        
+
+        const model = await ModelLoader.loadAvatar(this.model_path);
+        console.log(model)
+
+
+        const placeholder = new THREE.Mesh(
+            new THREE.BoxGeometry(1, 1, 1),
+            new THREE.MeshStandardMaterial({
+                color: 0xff00ff,
+                wireframe: false
+            })
+        );
+
+        this.scene.add(model? model : placeholder);
 
         
         
@@ -50,13 +67,6 @@ export class App {
         */
 
 
-    }
-
-
-    animate = () => {
-        requestAnimationFrame(this.animate);
-        const delta = this.timer.getDelta();
-        this.renderer.render(this.scene, this.camera);
     }
 
 }
