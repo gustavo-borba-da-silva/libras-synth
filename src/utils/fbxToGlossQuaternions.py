@@ -99,9 +99,14 @@ for gloss, gesture_data in gloss_data.items():
     for gesture_type, frame_interval in gesture_data.items():
         frame_interval = 1        
 
-# AJUSTAR AQUI EM CIMA
+"""
+    For each word (gloss), I have all the gesture types in a specific frame region
+    
+    Dúvidas que surgiram:
+        - Is there ever going to be a gloss that has a gesture that include different frame intervals?
+        - How am I going to translate the gesture data into the actual movement quaternions?
 
-
+"""
 
 # total_frames = frame_end - frame_start + 1
 

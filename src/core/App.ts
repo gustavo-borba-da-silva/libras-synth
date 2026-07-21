@@ -9,7 +9,7 @@ export class App {
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
     renderer = new THREE.WebGLRenderer();
     timer = new THREE.Timer();
-    model_path = "/models/CLARA.glb";
+    model_path = "public/models/CLARA.glb";
     orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
 
     async start() {
@@ -25,7 +25,7 @@ export class App {
         hemilight.position.set(0, 20, 0);
         this.scene.add(hemilight);
 
-        const dirLight = new THREE.DirectionalLight(0xffffff, 3);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
         dirLight.position.set(3,10,10);
         dirLight.castShadow = true;
         dirLight.shadow.camera.top = 2;
@@ -38,10 +38,9 @@ export class App {
 
 
         //  --------CÂMERA---------
-        this.camera.position.set(0, 3, 5);
-        this.camera.lookAt(0, 1, 0);
+        this.camera.position.set(0, 1.45, 0.8);
 
-        this.orbitControls.target.set( 0, 1, 0 );
+        this.orbitControls.target.set( 0, 1.5, 0 );
         this.orbitControls.enableDamping = true;
         this.orbitControls.enablePan = false;
         this.orbitControls.maxPolarAngle = Math.PI/2 - 0.05;
@@ -56,9 +55,6 @@ export class App {
 
         
 
-        const model = await ModelLoader.loadAvatar(this.model_path);
-        console.log(model)
-
 
         const placeholder = new THREE.Mesh(
             new THREE.BoxGeometry(1, 1, 1),
@@ -68,7 +64,9 @@ export class App {
             })
         );
 
-        this.scene.add(model? model : placeholder);
+        const model = await ModelLoader.loadAvatar(this.model_path);
+
+        this.scene.add(model.scene? model.scene : placeholder);
 
         this.animate();
 
